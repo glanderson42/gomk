@@ -1,0 +1,23 @@
+{
+    "project": "test-proj",
+    "targets": [
+        {
+            "bin": "test",
+            "outputDir": "bin",
+            "flags": [
+                "-race"
+            ],
+            "sources": [
+                "testfile/test.go"
+            ]
+        },
+       {
+           "bin": "server",
+           "outputDir": "bin",
+           "flags": [],
+           "sources": [
+               "testfile/gin-test/main.go"
+           ]
+       }
+    ]
+}

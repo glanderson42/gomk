@@ -1,0 +1,16 @@
+{
+  "project": "sample-project",
+  "installModules": false,
+  "targets": [
+    {
+      "bin": "sample-target",
+      "outputDir": "bin",
+      "sources": [
+        "sample.go"
+      ],
+      "flags": [
+        "-race"
+      ]
+    }
+  ]
+}
