@@ -20,7 +20,7 @@ func generateSample() {
 		Project: "sample-project",
 
 		Targets: []Target{
-			Target{
+			{
 				Bin:       "sample-target",
 				OutputDir: "bin",
 				SourceDir: "sample-project",

@@ -12,8 +12,10 @@
        {
            "bin": "server",
            "outputDir": "bin",
-           "flags": [],
-           "soruceDir": "testfile/gin-test"
+           "flags": [
+           ],
+           "release": false,
+           "sourceDir": "testfile/gin-test"
        }
     ]
 }
