@@ -10,7 +10,6 @@ import (
 )
 
 func main() {
-	log.Println(len(os.Args))
 	if len(os.Args) > 2 {
 		args_handler(os.Args)
 	}
@@ -33,22 +32,19 @@ func main() {
 	for _, target := range build.Targets {
 		log.Println("Building:", target.Bin)
 
-		var sources string
-		for index, source := range target.Sources {
-			log.Println("Source:", source)
-			sources += source
-			if index+1 != len(target.Sources) {
-				source += " "
-			}
-		}
-
-		var outputPath = target.OutputDir + string(os.PathSeparator) + target.Bin + getDefaultExtension()
+        buildPath, _ := os.Getwd()
+        target.SourceDir = buildPath + string(os.PathSeparator) + target.SourceDir
+		var outputPath = buildPath + target.OutputDir + string(os.PathSeparator) + target.Bin + getDefaultExtension()
 		var wg sync.WaitGroup
 		wg.Add(1)
 		if len(target.Flags) != 0 {
-			go runCommand(&wg, "build", "-o", outputPath, strings.Join(target.Flags, " "), sources)
+            go runCommand("cd", target.SourceDir)
+			go runGoCommand(&wg, "build", "-o", outputPath, strings.Join(target.Flags, " "), target.SourceDir)
+            go runCommand("cd", buildPath)
 		} else {
-			go runCommand(&wg, "build", "-o", outputPath, sources)
+            go runCommand("cd", target.SourceDir)
+			go runGoCommand(&wg, "build", "-o", outputPath, target.SourceDir)
+            go runCommand("cd", buildPath)
 		}
 		wg.Wait()
 		log.Println("Finished:", target.Bin)

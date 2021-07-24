@@ -7,17 +7,13 @@
             "flags": [
                 "-race"
             ],
-            "sources": [
-                "testfile/test.go"
-            ]
+            "sourceDir": "testfile/simple"
         },
        {
            "bin": "server",
            "outputDir": "bin",
            "flags": [],
-           "sources": [
-               "testfile/gin-test/main.go"
-           ]
+           "soruceDir": "testfile/gin-test"
        }
     ]
 }

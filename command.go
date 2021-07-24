@@ -7,10 +7,8 @@ import (
 	"time"
 )
 
-func runCommand(w *sync.WaitGroup, args ...string) {
-	defer w.Done()
-	log.Println("go", args)
-	out, err := exec.Command("go", args...).CombinedOutput()
+func runCommand(command string, args ...string) {
+	out, err := exec.Command(command, args...).CombinedOutput()
 	if len(out) != 0 {
 		log.Println(string(out))
 	}
@@ -18,6 +16,11 @@ func runCommand(w *sync.WaitGroup, args ...string) {
 	if err != nil {
 		log.Println("Error at:", err.Error())
 	}
+}
 
+func runGoCommand(w *sync.WaitGroup, args ...string) {
+	defer w.Done()
+	log.Println("go", args)
+    runCommand("go", args...)
 	time.Sleep(100 * time.Millisecond)
 }

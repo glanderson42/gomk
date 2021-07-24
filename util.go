@@ -23,9 +23,7 @@ func generateSample() {
 			Target{
 				Bin:       "sample-target",
 				OutputDir: "bin",
-				Sources: []string{
-					"sample.go",
-				},
+				SourceDir: "sample-project",
 				Flags: []string{
 					"-race",
 				},
