@@ -15,7 +15,7 @@ func NewArgs(programArgs []string) (*Args, error) {
 	if checkElementInArray("--generate-sample", programArgs) {
 		args.GenerateSample = true
 	}
-	
+
 	if checkElementInArray("--generate-makfile", programArgs) {
 		args.GenerateMakefile = true
 	}
@@ -23,7 +23,7 @@ func NewArgs(programArgs []string) (*Args, error) {
 	return &args, nil
 }
 
-func (args* Args) Run() {
+func (args *Args) Run() {
 	var shouldExit bool
 
 	if args.GenerateSample {

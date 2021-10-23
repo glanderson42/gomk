@@ -17,7 +17,7 @@ func getDefaultExtension() string {
 
 func generateSample() {
 	sample := Build{
-		Project: "sample-project",
+		Project:        "sample-project",
 		InstallModules: false,
 		Targets: []Target{
 			{
@@ -27,7 +27,7 @@ func generateSample() {
 				Flags: []string{
 					"-race",
 				},
-				Vendor: false,
+				Vendor:  false,
 				Release: false,
 			},
 		},
