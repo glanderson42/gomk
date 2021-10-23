@@ -16,6 +16,20 @@ type Target struct {
 	Release   bool     `json:"release"`
 }
 
+func (target *Target) BuildHelper(outputPath string, buildPath string, wg *sync.WaitGroup) {
+	log.Println("Entering:", target.SourceDir)
+	os.Chdir(target.SourceDir)
+	if len(target.Flags) != 0 {
+		log.Println("Running: go build -o", outputPath, strings.Join(target.Flags, " "), target.SourceDir)
+		go runGoCommand(wg, "build", "-o", outputPath, strings.Join(target.Flags, " "))
+	} else {
+		log.Println("Running: go build -o", outputPath, target.SourceDir)
+		go runGoCommand(wg, "build", "-o", outputPath)
+	}
+	log.Println("Leaving...")
+	os.Chdir(buildPath)
+}
+
 func (target *Target) Build() {
 	log.Println("Building:", target.Bin)
 
@@ -31,21 +45,7 @@ func (target *Target) Build() {
 	var outputPath = buildPath + string(os.PathSeparator) + target.OutputDir + string(os.PathSeparator) + target.Bin + getDefaultExtension()
 	var wg sync.WaitGroup
 	wg.Add(1)
-	if len(target.Flags) != 0 {
-		log.Println("Entering:", target.SourceDir)
-		os.Chdir(target.SourceDir)
-		log.Println("Running: go build -o", outputPath, strings.Join(target.Flags, " "), target.SourceDir)
-		go runGoCommand(&wg, "build", "-o", outputPath, strings.Join(target.Flags, " "))
-		log.Println("Leaving...")
-		os.Chdir(buildPath)
-	} else {
-		log.Println("Entering:", target.SourceDir)
-		os.Chdir(target.SourceDir)
-		log.Println("Running: go build -o", outputPath, target.SourceDir)
-		go runGoCommand(&wg, "build", "-o", outputPath)
-		log.Println("Leaving...")
-		os.Chdir(buildPath)
-	}
+	target.BuildHelper(outputPath, buildPath, &wg)
 	wg.Wait()
 	log.Println("Finished:", target.Bin)
 }
