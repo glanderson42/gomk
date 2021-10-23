@@ -12,13 +12,13 @@ func getDefaultExtension() string {
 		return ".exe"
 	}
 
-	return ""
+	return ".out"
 }
 
 func generateSample() {
 	sample := Build{
 		Project: "sample-project",
-
+		InstallModules: false,
 		Targets: []Target{
 			{
 				Bin:       "sample-target",
@@ -27,6 +27,8 @@ func generateSample() {
 				Flags: []string{
 					"-race",
 				},
+				Vendor: false,
+				Release: false,
 			},
 		},
 	}
