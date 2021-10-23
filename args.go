@@ -16,14 +16,14 @@ func NewArgs(programArgs []string) (*Args, error) {
 		args.GenerateSample = true
 	}
 
-	if checkElementInArray("--generate-makfile", programArgs) {
+	if checkElementInArray("--generate-makefile", programArgs) {
 		args.GenerateMakefile = true
 	}
 
 	return &args, nil
 }
 
-func (args *Args) Run() {
+func (args *Args) Run(build Build) {
 	var shouldExit bool
 
 	if args.GenerateSample {
@@ -35,6 +35,7 @@ func (args *Args) Run() {
 
 	if args.GenerateMakefile {
 		log.Println("Generating Makefile...")
+		generateMakefile(build)
 		shouldExit = true
 	}
 
