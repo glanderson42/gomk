@@ -9,7 +9,7 @@ import (
 
 func runCommand(command string, args ...string) {
 	out, err := exec.Command(command, args...).CombinedOutput()
-    time.Sleep(100 * time.Millisecond)
+	time.Sleep(100 * time.Millisecond)
 	if len(out) != 0 {
 		log.Println(string(out))
 	}
@@ -21,7 +21,6 @@ func runCommand(command string, args ...string) {
 
 func runGoCommand(w *sync.WaitGroup, args ...string) {
 	defer w.Done()
-    log.Println(args)
-    runCommand("go", args...)
+	runCommand("go", args...)
 	time.Sleep(100 * time.Millisecond)
 }

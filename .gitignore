@@ -1,3 +1,6 @@
 bin
 *.exe
 *.swp
+gomk
+testfile/
+gomk.json
