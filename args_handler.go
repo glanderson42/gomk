@@ -6,14 +6,18 @@ import (
 	"os"
 )
 
-func args_handler(args []string) error {
-	if args[1] == "--generate-sample" {
+func args_handler(args []string, generateMakefile *bool) error {
+	if checkElementInArray("--generate-sample", args) {
 		log.Println("Generating sample...")
 		generateSample()
 		log.Println("Finished!")
-		os.Exit(1)
+		os.Exit(0)
+		return nil
+	} else if checkElementInArray("--generate-makefile", args) {
+		log.Println("Generating makefile...")
+		os.Exit(0)
 		return nil
 	}
 
-	return errors.New("Unknown command!")
+	return errors.New("unknown command")
 }

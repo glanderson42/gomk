@@ -14,7 +14,6 @@
            "outputDir": "bin",
            "flags": [
            ],
-           "release": false,
            "sourceDir": "testfile/gin-test"
        }
     ]

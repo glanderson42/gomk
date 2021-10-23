@@ -36,12 +36,16 @@ func generateSample() {
 	_ = ioutil.WriteFile("gomk.sample.json", file, 0644)
 }
 
-func getValueByKey(key string, arr []string) string {
-	for index, element := range arr {
-		if strings.Compare(key, element) == 0 && index+1 < len(arr) {
-			return arr[index+1]
+func checkElementInArray(element string, arr []string) bool {
+	for _, elem := range arr {
+		if strings.Compare(element, elem) == 0 {
+			return true
 		}
 	}
 
-	return ""
+	return false
+}
+
+func generateMakefile(build Build) {
+
 }

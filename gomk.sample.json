@@ -5,12 +5,12 @@
     {
       "bin": "sample-target",
       "outputDir": "bin",
-      "sources": [
-        "sample.go"
-      ],
+      "sourceDir": "sample-project",
       "flags": [
         "-race"
-      ]
+      ],
+      "vendor": false,
+      "release": false
     }
   ]
 }
