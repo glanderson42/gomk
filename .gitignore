@@ -3,5 +3,5 @@ bin
 *.swp
 gomk
 testfile/
-gomk.json
 Makefile
+./gomk.json
