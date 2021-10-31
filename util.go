@@ -6,6 +6,8 @@ import (
 	"io/ioutil"
 	"runtime"
 	"strings"
+	"log"
+	"os"
 )
 
 func getDefaultExtension() string {
@@ -78,4 +80,11 @@ func generateMakefile(build Build) {
 	makefileString += all
 
 	_ = ioutil.WriteFile("Makefile", []byte(makefileString), 0644)
+}
+
+func clean(build Build) {
+	for _, elem := range build.Targets {
+		log.Println("Removing binary: " + elem.Bin)
+		os.Remove(elem.Bin)
+	}
 }
