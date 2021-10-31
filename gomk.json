@@ -1,0 +1,20 @@
+{
+    "project": "test-proj",
+    "targets": [
+        {
+            "bin": "test",
+            "outputDir": "bin",
+            "flags": [
+                "-race"
+            ],
+            "sourceDir": "test-projects/simple"
+        },
+       {
+           "bin": "server",
+           "outputDir": "bin",
+           "flags": [
+           ],
+           "sourceDir": "test-projects/gin-test"
+       }
+    ]
+}
