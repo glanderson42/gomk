@@ -4,3 +4,4 @@ bin
 gomk
 testfile/
 Makefile
+./gomk.json
