@@ -15,14 +15,12 @@ func main() {
 	}
 
 	jsonFile, err := ioutil.ReadFile("gomk.json")
-
 	if err != nil {
 		log.Println(err.Error())
 		return
 	}
 
 	var build Build
-
 	err = json.Unmarshal(jsonFile, &build)
 
 	args.Run(build)
