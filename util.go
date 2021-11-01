@@ -8,8 +8,6 @@ import (
 	"os"
 	"runtime"
 	"strings"
-	"log"
-	"os"
 )
 
 func getDefaultExtension() string {
