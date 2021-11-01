@@ -7,14 +7,14 @@
             "flags": [
                 "-race"
             ],
-            "sourceDir": "test-projects/simple"
+            "sourceDir": "examples/test-projects/simple"
         },
        {
            "bin": "server",
            "outputDir": "bin",
            "flags": [
            ],
-           "sourceDir": "test-projects/gin-test"
+           "sourceDir": "examples/test-projects/gin-test"
        }
     ]
 }

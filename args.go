@@ -8,7 +8,7 @@ import (
 type Args struct {
 	GenerateSample   bool
 	GenerateMakefile bool
-	Clean 			 bool
+	Clean            bool
 }
 
 func NewArgs(programArgs []string) (*Args, error) {

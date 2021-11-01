@@ -4,6 +4,8 @@ import (
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
+	"log"
+	"os"
 	"runtime"
 	"strings"
 	"log"
@@ -15,7 +17,7 @@ func getDefaultExtension() string {
 		return ".exe"
 	}
 
-	return ".out"
+	return ""
 }
 
 func generateSample() {
@@ -84,7 +86,7 @@ func generateMakefile(build Build) {
 
 func clean(build Build) {
 	for _, elem := range build.Targets {
-		log.Println("Removing binary: " + elem.Bin)
-		os.Remove(elem.Bin)
+		log.Printf("Removing binary: %s/%s", elem.OutputDir, elem.Bin)
+		os.Remove(fmt.Sprintf("%s%s%s", elem.OutputDir, string(os.PathSeparator), elem.Bin))
 	}
 }
