@@ -1,14 +1,9 @@
 package main
 
-import (
-	"log"
-	"os"
-)
-
 type Args struct {
 	GenerateSample   bool
 	GenerateMakefile bool
-	Clean 			 bool
+	Clean            bool
 }
 
 func NewArgs(programArgs []string) (*Args, error) {
@@ -26,31 +21,4 @@ func NewArgs(programArgs []string) (*Args, error) {
 	}
 
 	return &args, nil
-}
-
-func (args *Args) Run(build Build) {
-	var shouldExit bool
-
-	if args.GenerateSample {
-		log.Println("Generating sample...")
-		generateSample()
-		log.Println("Finished!")
-		shouldExit = true
-	}
-
-	if args.GenerateMakefile {
-		log.Println("Generating Makefile...")
-		generateMakefile(build)
-		shouldExit = true
-	}
-
-	if args.Clean {
-		log.Println("Cleaning up...")
-		clean(build)
-		shouldExit = true
-	}
-
-	if shouldExit {
-		os.Exit(0)
-	}
 }
