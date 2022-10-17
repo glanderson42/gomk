@@ -4,6 +4,8 @@ type Args struct {
 	GenerateSample   bool
 	GenerateMakefile bool
 	Clean            bool
+	Init             bool
+	ProjectName      string
 }
 
 func NewArgs(programArgs []string) (*Args, error) {
@@ -18,6 +20,11 @@ func NewArgs(programArgs []string) (*Args, error) {
 
 	if checkElementInArray("--clean", programArgs) {
 		args.Clean = true
+	}
+
+	if checkElementInArray("--init", programArgs) {
+		args.Init = true
+		args.ProjectName = programArgs[2]
 	}
 
 	return &args, nil

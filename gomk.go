@@ -11,36 +11,49 @@ type Gomk struct {
 	buildParams Build
 }
 
-func NewGomk(buildParams Build) *Gomk {
+func NewGomk() *Gomk {
 	gomk := new(Gomk)
-	gomk.buildParams = buildParams
 	return gomk
 }
 
 func (g *Gomk) Run(args *Args) {
-	var shouldExit bool
-
 	if args.GenerateSample {
 		log.Println("Generating sample...")
 		generateSample()
-		log.Println("Finished!")
-		shouldExit = true
-	}
-
-	if args.GenerateMakefile {
-		log.Println("Generating Makefile...")
-		generateMakefile(g.buildParams)
-		shouldExit = true
+		log.Println("Done!")
+		return
 	}
 
 	if args.Clean {
 		log.Println("Cleaning up...")
 		clean(g.buildParams)
-		shouldExit = true
+		log.Println("Done!")
+		return
 	}
 
-	if shouldExit {
-		os.Exit(0)
+	if args.Init {
+		log.Println("Running init...")
+		initProject(args.ProjectName)
+		log.Println("Done!")
+		return
+	}
+
+	jsonFile, err := ioutil.ReadFile("gomk.json")
+	if err != nil {
+		log.Println(err.Error())
+		return
+	}
+
+	err = json.Unmarshal(jsonFile, &g.buildParams)
+	if err != nil {
+		log.Println(err.Error())
+		return
+	}
+
+	if args.GenerateMakefile {
+		log.Println("Generating Makefile...")
+		generateMakefile(g.buildParams)
+		return
 	}
 
 	for _, target := range g.buildParams.Targets {
@@ -55,21 +68,7 @@ func main() {
 		return
 	}
 
-	jsonFile, err := ioutil.ReadFile("gomk.json")
-	if err != nil {
-		log.Println(err.Error())
-		return
-	}
-
-	var build Build
-	err = json.Unmarshal(jsonFile, &build)
-
-	if err != nil {
-		log.Println(err.Error())
-		return
-	}
-
-	app := NewGomk(build)
+	app := NewGomk()
 	app.Run(args)
 
 }
