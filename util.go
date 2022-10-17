@@ -3,6 +3,7 @@ package main
 import (
 	"encoding/json"
 	"fmt"
+	"io/fs"
 	"io/ioutil"
 	"log"
 	"os"
@@ -87,4 +88,39 @@ func clean(build Build) {
 		log.Printf("Removing binary: %s/%s", elem.OutputDir, elem.Bin)
 		os.Remove(fmt.Sprintf("%s%s%s", elem.OutputDir, string(os.PathSeparator), elem.Bin))
 	}
+}
+
+func initProject(projectName string) {
+	log.Println(projectName)
+	err := os.Mkdir(projectName, os.ModePerm)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	ioutil.WriteFile(fmt.Sprintf("%s%s%s", projectName, string(os.PathSeparator), "main.go"),
+		[]byte(`
+		package main
+
+		func main() {}
+		`),
+		fs.FileMode(os.O_CREATE))
+
+	sample := Build{
+		Project:        projectName,
+		InstallModules: false,
+		Targets: []Target{
+			{
+				Bin:       projectName,
+				OutputDir: "bin",
+				SourceDir: ".",
+				Flags:     []string{},
+				Vendor:    false,
+				Release:   false,
+			},
+		},
+	}
+
+	file, _ := json.MarshalIndent(sample, "", "  ")
+
+	_ = ioutil.WriteFile(fmt.Sprintf("%s%s%s", projectName, string(os.PathSeparator), "gomk.json"), file, fs.FileMode(os.O_CREATE))
 }
