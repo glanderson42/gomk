@@ -1,5 +1,7 @@
 package main
 
+import "log"
+
 type Args struct {
 	GenerateSample   bool
 	GenerateMakefile bool
@@ -9,7 +11,7 @@ type Args struct {
 }
 
 func NewArgs(programArgs []string) (*Args, error) {
-	var args Args
+	args := new(Args)
 	if checkElementInArray("--generate-sample", programArgs) {
 		args.GenerateSample = true
 	}
@@ -23,9 +25,12 @@ func NewArgs(programArgs []string) (*Args, error) {
 	}
 
 	if checkElementInArray("--init", programArgs) {
+		if len(programArgs) != 3 {
+			log.Fatal("Argument missing")
+		}
 		args.Init = true
 		args.ProjectName = programArgs[2]
 	}
 
-	return &args, nil
+	return args, nil
 }
