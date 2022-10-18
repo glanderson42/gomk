@@ -4,11 +4,10 @@ import (
 	"encoding/json"
 	"io/ioutil"
 	"log"
-	"os"
 )
 
 type Gomk struct {
-	buildParams Build
+	project Project
 }
 
 func NewGomk() *Gomk {
@@ -19,21 +18,21 @@ func NewGomk() *Gomk {
 func (g *Gomk) Run(args *Args) {
 	if args.GenerateSample {
 		log.Println("Generating sample...")
-		generateSample()
+		g.project.GenerateSample()
 		log.Println("Done!")
 		return
 	}
 
 	if args.Clean {
 		log.Println("Cleaning up...")
-		clean(g.buildParams)
+		g.project.Clean()
 		log.Println("Done!")
 		return
 	}
 
 	if args.Init {
 		log.Println("Running init...")
-		initProject(args.ProjectName)
+		g.project.Init()
 		log.Println("Done!")
 		return
 	}
@@ -44,7 +43,7 @@ func (g *Gomk) Run(args *Args) {
 		return
 	}
 
-	err = json.Unmarshal(jsonFile, &g.buildParams)
+	err = json.Unmarshal(jsonFile, &g.project.buildParams)
 	if err != nil {
 		log.Println(err.Error())
 		return
@@ -52,23 +51,11 @@ func (g *Gomk) Run(args *Args) {
 
 	if args.GenerateMakefile {
 		log.Println("Generating Makefile...")
-		generateMakefile(g.buildParams)
+		g.project.GenerateMakefile()
 		return
 	}
 
-	for _, target := range g.buildParams.Targets {
+	for _, target := range g.project.buildParams.Targets {
 		target.Build()
 	}
-}
-
-func main() {
-	args, err := NewArgs(os.Args)
-	if err != nil {
-		log.Println(err.Error())
-		return
-	}
-
-	app := NewGomk()
-	app.Run(args)
-
 }

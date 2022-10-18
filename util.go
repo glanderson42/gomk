@@ -1,12 +1,6 @@
 package main
 
 import (
-	"encoding/json"
-	"fmt"
-	"io/fs"
-	"io/ioutil"
-	"log"
-	"os"
 	"runtime"
 	"strings"
 )
@@ -19,29 +13,6 @@ func getDefaultExtension() string {
 	return ""
 }
 
-func generateSample() {
-	sample := Build{
-		Project:        "sample-project",
-		InstallModules: false,
-		Targets: []Target{
-			{
-				Bin:       "sample-target",
-				OutputDir: "bin",
-				SourceDir: "sample-project",
-				Flags: []string{
-					"-race",
-				},
-				Vendor:  false,
-				Release: false,
-			},
-		},
-	}
-
-	file, _ := json.MarshalIndent(sample, "", "  ")
-
-	_ = ioutil.WriteFile("gomk.sample.json", file, 0644)
-}
-
 func checkElementInArray(element string, arr []string) bool {
 	for _, elem := range arr {
 		if strings.Compare(element, elem) == 0 {
@@ -50,77 +21,4 @@ func checkElementInArray(element string, arr []string) bool {
 	}
 
 	return false
-}
-
-func generateMakefile(build Build) {
-	var makefileString string
-	makefileString += "COMPILER=go"
-	var targetObject string
-	phony := ".PHONY: "
-	clean := "clean: \n"
-	all := "all: "
-
-	for _, elem := range build.Targets {
-		makefileString += "\n"
-		targetObject += elem.Bin
-		targetObject += ": \n"
-		targetObject += fmt.Sprintf("\tcd %s && \\\n", elem.SourceDir)
-		targetObject += fmt.Sprintf("\t$(COMPILER) build -o $(shell pwd)/%s/$@ %s\n", elem.OutputDir, strings.Join(elem.Flags, " "))
-		targetObject += "\n"
-
-		phony += elem.Bin + " "
-		clean += fmt.Sprintf("\trm -rf $(shell pwd)/%s/%s\n", elem.OutputDir, elem.Bin)
-		all += elem.Bin + " "
-	}
-	makefileString += targetObject
-	makefileString += "\n"
-	makefileString += phony
-	makefileString += "\n"
-	makefileString += clean
-	makefileString += "\n"
-	makefileString += all
-
-	_ = ioutil.WriteFile("Makefile", []byte(makefileString), 0644)
-}
-
-func clean(build Build) {
-	for _, elem := range build.Targets {
-		log.Printf("Removing binary: %s/%s", elem.OutputDir, elem.Bin)
-		os.Remove(fmt.Sprintf("%s%s%s", elem.OutputDir, string(os.PathSeparator), elem.Bin))
-	}
-}
-
-func initProject(projectName string) {
-	log.Println(projectName)
-	err := os.Mkdir(projectName, os.ModePerm)
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	ioutil.WriteFile(fmt.Sprintf("%s%s%s", projectName, string(os.PathSeparator), "main.go"),
-		[]byte(`
-		package main
-
-		func main() {}
-		`),
-		fs.FileMode(os.O_CREATE))
-
-	sample := Build{
-		Project:        projectName,
-		InstallModules: false,
-		Targets: []Target{
-			{
-				Bin:       projectName,
-				OutputDir: "bin",
-				SourceDir: ".",
-				Flags:     []string{},
-				Vendor:    false,
-				Release:   false,
-			},
-		},
-	}
-
-	file, _ := json.MarshalIndent(sample, "", "  ")
-
-	_ = ioutil.WriteFile(fmt.Sprintf("%s%s%s", projectName, string(os.PathSeparator), "gomk.json"), file, fs.FileMode(os.O_CREATE))
 }
