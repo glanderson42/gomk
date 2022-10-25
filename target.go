@@ -14,23 +14,26 @@ type Target struct {
 	Flags     []string `json:"flags"`
 	Vendor    bool     `json:"vendor"`
 	Release   bool     `json:"release"`
+	Before    Step     `json:"before"`
+	After     Step     `json:"after"`
 }
 
 func (target *Target) BuildHelper(outputPath string, buildPath string, wg *sync.WaitGroup) {
+	defer wg.Done()
 	log.Println("Entering:", target.SourceDir)
 	os.Chdir(target.SourceDir)
 	if len(target.Flags) != 0 {
 		log.Println("Running: go build -o", outputPath, strings.Join(target.Flags, " "), target.SourceDir)
-		go runGoCommand(wg, "build", "-o", outputPath, strings.Join(target.Flags, " "))
+		runGoCommand("build", "-o", outputPath, strings.Join(target.Flags, " "))
 	} else {
 		log.Println("Running: go build -o", outputPath, target.SourceDir)
-		go runGoCommand(wg, "build", "-o", outputPath)
+		runGoCommand("build", "-o", outputPath)
 	}
 	log.Println("Leaving...")
 	os.Chdir(buildPath)
 }
 
-func (target *Target) Build() {
+func (target *Target) Build(wg *sync.WaitGroup) {
 	log.Println("Building:", target.Bin)
 
 	if target.Release {
@@ -43,9 +46,6 @@ func (target *Target) Build() {
 	buildPath, _ := os.Getwd()
 	target.SourceDir = buildPath + string(os.PathSeparator) + target.SourceDir
 	var outputPath = buildPath + string(os.PathSeparator) + target.OutputDir + string(os.PathSeparator) + target.Bin + getDefaultExtension()
-	var wg sync.WaitGroup
-	wg.Add(1)
-	target.BuildHelper(outputPath, buildPath, &wg)
-	wg.Wait()
+	target.BuildHelper(outputPath, buildPath, wg)
 	log.Println("Finished:", target.Bin)
 }

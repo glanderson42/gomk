@@ -3,15 +3,12 @@ package main
 import (
 	"log"
 	"os/exec"
-	"sync"
-	"time"
 )
 
-func runCommand(command string, args ...string) {
+func run(command string, args ...string) {
 	out, err := exec.Command(command, args...).CombinedOutput()
-	time.Sleep(100 * time.Millisecond)
 	if len(out) != 0 {
-		log.Println(string(out))
+		log.Print(string(out))
 	}
 
 	if err != nil {
@@ -19,8 +16,6 @@ func runCommand(command string, args ...string) {
 	}
 }
 
-func runGoCommand(w *sync.WaitGroup, args ...string) {
-	defer w.Done()
-	runCommand("go", args...)
-	time.Sleep(100 * time.Millisecond)
+func runGoCommand(args ...string) {
+	run("go", args...)
 }

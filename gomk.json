@@ -1,5 +1,21 @@
 {
     "project": "test-proj",
+    "before": {
+        "command": "echo",
+        "params": ["Hello World!"]
+    },
+    "after": {
+        "command": "echo",
+        "params": ["Goodbye"]
+    },
+    "beforeEach": {
+        "command": "echo",
+        "params": ["Before each"]
+    },
+    "afterEach": {
+        "command": "echo",
+        "params": ["After each"]
+    },
     "targets": [
         {
             "bin": "test",
