@@ -106,7 +106,7 @@ func (p *Project) Init() {
 
 func (p *Project) Clean() {
 	for _, target := range p.buildParams.Targets {
-		log.Printf("Removing binary: %s/%s", target.OutputDir, target.Bin)
+		log.Printf("Removing binary: %s%s%s", target.OutputDir, string(os.PathSeparator), target.Bin)
 		os.Remove(fmt.Sprintf("%s%s%s", target.OutputDir, string(os.PathSeparator), target.Bin))
 	}
 }
