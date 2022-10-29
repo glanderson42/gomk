@@ -23,10 +23,10 @@ func (target *Target) BuildHelper(outputPath string, buildPath string, wg *sync.
 	log.Println("Entering:", target.SourceDir)
 	os.Chdir(target.SourceDir)
 	if len(target.Flags) != 0 {
-		log.Println("Running: go build -o", outputPath, strings.Join(target.Flags, " "), target.SourceDir)
+		log.Println("Running: go build -o", outputPath, strings.Join(target.Flags, " "))
 		runGoCommand("build", "-o", outputPath, strings.Join(target.Flags, " "))
 	} else {
-		log.Println("Running: go build -o", outputPath, target.SourceDir)
+		log.Println("Running: go build -o", outputPath)
 		runGoCommand("build", "-o", outputPath)
 	}
 	log.Println("Leaving...")
